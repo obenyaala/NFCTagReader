@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="NFCTagReader/NFCTagReader.Shared/NFCTagReader.Shared.csproj" />
+  <Project Path="NFCTagReader/NFCTagReader.Web.Client/NFCTagReader.Web.Client.csproj" />
+  <Project Path="NFCTagReader/NFCTagReader.Web/NFCTagReader.Web.csproj" />
+  <Project Path="NFCTagReader/NFCTagReader/NFCTagReader.csproj" />
+</Solution>
