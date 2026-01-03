@@ -1,14 +1,63 @@
 ﻿@page "/"
 @using NFCTagReader.Shared.Services
-@inject IFormFactor FormFactor
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
-Welcome to your new Fluent app running on <em>@factor</em> using <em>@platform</em>.
+<h3>Is Nfc available: @NfcReaderWriter?.IsAvailable</h3>
+<h3>Is Nfc enabled: @NfcReaderWriter?.IsEnabled</h3>
 
-@code {
-    private string factor => FormFactor.GetFormFactor();
-    private string platform => FormFactor.GetPlatform();
-}
+<div style="padding-bottom: 10px;">
+
+    <FluentCard style="max-width:420px; max-height:200px; overflow:auto;">
+        <div style="padding:12px;">
+            <h3>Nfc Tag</h3>
+            <FluentStack Orientation="Orientation.Horizontal">
+                <FluentTextField @bind-Value="_messageToWrite"></FluentTextField>
+                <FluentButton appearance="Appearance.Accent" OnClick="WriteNfcTagAsync">Write</FluentButton>
+            </FluentStack>
+
+        </div>
+    </FluentCard>
+
+    @if (_nfcTag is not null)
+    {
+        <FluentCard style="max-width:420px; margin-top: 10px;">
+            <div style="padding:12px;">
+                <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;align-items:center;">
+                    <div style="color:var(--neutral-foreground-rest);font-weight:600;">Serial Number</div>
+                    <div style="color:var(--neutral-foreground-rest);">@(_nfcTag.SerialNumber ?? "—")</div>
+                </div>
+                @if (_nfcTag.Records?.Any() == true)
+                {
+                    <div style="margin-top:12px;">
+                        <div style="font-weight:600;margin-bottom:8px;">Records</div>
+
+                        @foreach (var rec in _nfcTag.Records)
+                        {
+                            <FluentCard style="max-width:380px; max-height:140px; overflow:auto; margin-bottom:8px;">
+                                <div style="padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                                        <div style="font-weight:600;">
+                                            @rec.TypeFormat (@($"0x{((int)rec.TypeFormat):X2}"))
+                                        </div>
+                                        <div style="font-size:0.85rem;color:var(--neutral-foreground-rest);">
+                                            @rec.MimeType
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-top:8px;color:var(--neutral-foreground-rest);">
+                                        @(!string.IsNullOrWhiteSpace(rec.Message) ? rec.Message : "—")
+                                    </div>
+                                </div>
+                            </FluentCard>
+                        }
+                    </div>
+                }
+            </div>
+        </FluentCard>
+
+    }
+
+</div>

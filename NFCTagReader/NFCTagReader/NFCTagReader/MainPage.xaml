@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:NFCTagReader"
              xmlns:shared="clr-namespace:NFCTagReader.Shared;assembly=NFCTagReader.Shared"
              x:Class="NFCTagReader.MainPage"
+             Padding="0,0,0,20"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
     <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">

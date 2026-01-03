@@ -1,5 +1,21 @@
+html, body, #app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  overflow-y: auto;
+}
+
+#app {
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* Preserve safe-area for devices with display cutouts */
 .status-bar-safe-area {
-    display: none;
+  height: env(safe-area-inset-top, 0);
 }
 
 @supports (-webkit-touch-callout: none) {

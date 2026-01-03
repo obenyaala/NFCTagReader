@@ -3,6 +3,7 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using NFCTagReader.Services;
 using NFCTagReader.Shared.Services;
 
+
 namespace NFCTagReader
 {
     public static class MauiProgram
@@ -19,6 +20,7 @@ namespace NFCTagReader
 
             // Add device-specific services used by the NFCTagReader.Shared project
             builder.Services.AddSingleton<IFormFactor, FormFactor>();
+            builder.Services.AddSingleton<INfcReaderWriter, NfcReaderWriter>();
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddFluentUIComponents();
