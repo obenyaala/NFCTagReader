@@ -1,0 +1,104 @@
+﻿/* Elevated floating bottom nav with consistent bottom background strip */
+.bottom-nav {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    height: 56px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: var(--neutral-layer-card-container, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.18);
+    z-index: 3100;
+    padding: 0 6px;
+    transition: bottom 150ms ease, box-shadow 150ms ease;
+}
+
+/* Extra safe spacing for Android soft navigation bar (applies when class .android is set) */
+.bottom-nav.android {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+    height: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Keep page content visible above background strip.
+   This class is added to the body by NavMenu's JS. */
+:global(.page-with-bottom-nav) {
+    padding-bottom: 84px; /* room for nav + comfortable gap (increase slightly to be safe) */
+}
+
+/* Android variant increases bottom padding */
+:global(.page-with-bottom-nav-android) {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Fixed bottom background strip that matches nav background.
+   It sits above the page background to remove banding, below the nav. */
+:global(.page-with-bottom-nav)::after {
+    content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 84px; /* match padding-bottom */
+    background: var(--neutral-layer-card-container, #ffffff);
+    z-index: 3050; /* below nav (3100) but above page background */
+    pointer-events: none;
+}
+
+:global(.page-with-bottom-nav-android)::after {
+    height: calc(84px + env(safe-area-inset-bottom, 0px));
+}
+
+
+.bottom-nav .tab .tab-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    line-height: 1;
+    padding: 6px 8px;
+}
+
+/* Icon sizing */
+.bottom-nav fluent-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* hide labels on very small screens */
+@media (max-width: 360px) {
+    .bottom-nav .tab .tab-content span {
+        display: none;
+    }
+}
+
+/* default tab decoration (unselected) */
+.bottom-nav .tab,
+.bottom-nav .tab:link,
+.bottom-nav .tab:visited {
+    text-decoration: underline;
+    text-decoration-color: var(--neutral-foreground-rest, rgba(0,0,0,0.25));
+    text-decoration-thickness: 1px;
+}
+
+/* Strongly remove underline for the selected tab (ActiveClass="selected") and for aria-current anchors */
+.bottom-nav .tab.selected,
+.bottom-nav .tab.selected .tab-content,
+.bottom-nav .tab.selected .tab-content *,
+.bottom-nav a[aria-current="page"],
+.bottom-nav a[aria-current="page"] .tab-content,
+.bottom-nav a[aria-current="page"] .tab-content * {
+    text-decoration: none !important;
+    -webkit-text-decoration: none !important;
+    border-bottom: none !important;
+}
+
+/* active color/weight */
+.bottom-nav .tab.selected,
+.bottom-nav a[aria-current="page"] {
+    color: var(--accent-foreground-rest, #0063b1);
+    font-weight: 600;
+}

@@ -13,13 +13,7 @@ public partial class NfcReaderWriter : INfcReaderWriter
     public NfcReaderWriter()
     {
         CrossNFC.Current.OnMessageReceived += OnMessageReceived;
-        CrossNFC.Current.OnMessagePublished += OnMessagePublished;
         CrossNFC.Current.StartListening();
-    }
-
-
-    private void OnMessagePublished(ITagInfo tagInfo)
-    {
     }
 
     private void OnMessageReceived(ITagInfo tagInfo) => TagDiscoverded?.Invoke(this, new NfcTag
@@ -43,26 +37,24 @@ public partial class NfcReaderWriter : INfcReaderWriter
             {
                 TypeFormat = NFCNdefTypeFormat.WellKnown,
                 MimeType = "text/plain",
-                Payload = Encoding.UTF8.GetBytes(message)
+                Payload = Encoding.UTF8.GetBytes(message),
             };
 
             tagInfo.Records = [record];
+
+            CrossNFC.Current.PublishMessage(tagInfo, makeReadOnly: false);
         }
 
         void onMessagePublished(ITagInfo tagInfo)
         {
             CrossNFC.Current.StopPublishing();
-            CrossNFC.Current.StartListening();
-
             semaphore.Release();
         }
 
         CrossNFC.Current.OnTagDiscovered += onTagDiscovered;
-        CrossNFC.Current.OnMessageReceived += onMessagePublished;
-        CrossNFC.Current.StopListening();
+        CrossNFC.Current.OnMessagePublished += onMessagePublished;
 
         CrossNFC.Current.StartPublishing();
-
         await semaphore.WaitAsync(cancellationToken);
     }
 
